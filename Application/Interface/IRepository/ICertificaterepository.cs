@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Interface.IRepository
+{
+public    interface ICertificaterepository
+    {
+        Task<bool> AddCertificateAsync(string certificate, int userId);
+    }
+}
