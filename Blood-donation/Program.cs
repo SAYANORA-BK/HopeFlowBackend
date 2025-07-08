@@ -97,9 +97,23 @@ namespace Blood_donation
                 
             });
 
-            var app = builder.Build();
 
-           
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5175")
+                             .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
+
+            var app = builder.Build();
+        
+
+
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -108,7 +122,7 @@ namespace Blood_donation
 
             app.UseHttpsRedirection();
 
-          
+            app.UseCors("AllowFrontend");
             app.UseAuthentication(); 
             app.UseAuthorization();
 
