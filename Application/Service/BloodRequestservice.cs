@@ -18,7 +18,7 @@ namespace Application.Service
             _repository = repository;
         }
 
-        public async Task<ApiresponseDto<object>> CreateRequestAsync(BloodrequestDto dto, int requesterId)
+        public async Task<ApiresponseDto<object>> CreateRequest(BloodrequestDto dto, int requesterId)
         {
             
             var userExists = await _repository.UserExistsAsync(requesterId);
@@ -31,7 +31,7 @@ namespace Application.Service
                 };
             }
 
-            var success = await _repository.CreateRequestAsync(dto, requesterId);
+            var success = await _repository.CreateRequest(dto, requesterId);
             return new ApiresponseDto<object>
             {
                 StatusCode = success ? 200 : 400,
@@ -39,9 +39,9 @@ namespace Application.Service
             };
         }
 
-        public async Task<ApiresponseDto<IEnumerable<BloodrequestResponseDto>>> GetPendingRequestsAsync()
+        public async Task<ApiresponseDto<IEnumerable<BloodrequestResponseDto>>> GetPendingRequest()
         {
-            var result = await _repository.GetRequestsByStatusAsync("Pending");
+            var result = await _repository.GetRequestsByStatus("Pending");
 
             if (result == null || !result.Any())
             {
@@ -62,9 +62,9 @@ namespace Application.Service
         }
 
 
-        public async Task<ApiresponseDto<object>> AcceptRequestAsync(int requestId)
+        public async Task<ApiresponseDto<object>> AcceptRequest(int requestId)
         {
-            var result = await _repository.UpdateRequestStatusAsync(requestId, "Accepted");
+            var result = await _repository.UpdateRequestStatus(requestId, "Accepted");
             return new ApiresponseDto<object>
             {
                 StatusCode = result ? 200 : 400,
@@ -72,18 +72,18 @@ namespace Application.Service
             };
         }
 
-        public async Task<ApiresponseDto<object>> RejectRequestAsync(int requestId)
+        public async Task<ApiresponseDto<object>> RejectRequest(int requestId)
         {
-            var result = await _repository.UpdateRequestStatusAsync(requestId, "Rejected");
+            var result = await _repository.UpdateRequestStatus(requestId, "Rejected");
             return new ApiresponseDto<object>
             {
                 StatusCode = result ? 200 : 400,
                 Message = result ? "Request rejected successfully." : "Failed to reject request."
             };
         }
-        public async Task<ApiresponseDto<IEnumerable<BloodrequestResponseDto>>> GetAllRequestsAsync()
+        public async Task<ApiresponseDto<IEnumerable<BloodrequestResponseDto>>> GetAllRequests()
         {
-            var result = await _repository.GetAllRequestsAsync();
+            var result = await _repository.GetAllRequest();
 
             if (result == null || !result.Any())
             {
@@ -102,6 +102,39 @@ namespace Application.Service
                 Data = result
             };
         }
+        public async Task<ApiresponseDto<object>> EditRequest(int requestId, BloodrequestDto dto)
+        {
+            var updated = await _repository.EditRequest(requestId, dto);
+
+            return new ApiresponseDto<object>
+            {
+                StatusCode = updated ? 200 : 400,
+                Message = updated ? "Blood request updated successfully." : "Failed to update blood request."
+            };
+        }
+
+        public async Task<ApiresponseDto<string>> DeleteRequestById(int requestId)
+        {
+            var isDeleted = await _repository.DeleteRequest(requestId);
+
+            if (!isDeleted)
+            {
+                return new ApiresponseDto<string>
+                {
+                    StatusCode = 404,
+                    Message = "Blood request not found or already deleted.",
+                    Data = null
+                };
+            }
+
+            return new ApiresponseDto<string>
+            {
+                StatusCode = 200,
+                Message = "Blood request deleted successfully.",
+                Data = $"Request with ID {requestId} has been deleted."
+            };
+        }
+
 
     }
 }

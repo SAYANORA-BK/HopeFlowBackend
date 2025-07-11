@@ -22,7 +22,7 @@ namespace Infrastructure.Repositories
 
             using var connection = _dapperContext.CreateConnection();
             var user = await connection.QueryFirstOrDefaultAsync<UserDto>(sql, new { Email = email });
-
+            Console.WriteLine(user.role);
             return user;
         }
 

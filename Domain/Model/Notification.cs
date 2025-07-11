@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Model
 {
-    class Notification:Baseclass
+ public   class Notification :Baseclass
     {
         public int Id { get; set; }
         public int SentBy { get; set; }  

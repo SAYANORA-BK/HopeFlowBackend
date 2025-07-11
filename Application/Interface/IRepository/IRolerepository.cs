@@ -10,7 +10,7 @@ namespace Application.Interface.IRepository
 {
    public interface IRolerepository
     {
-        Task<List<RoleSelectionDto>> GetAllRolesAsync();
-        Task<string> GetRolesAsyncById(int roleid);
+        Task<List<RoleSelectionDto>> GetAllRoles();
+        Task<string> GetRolesById(int roleid);
     }
 }

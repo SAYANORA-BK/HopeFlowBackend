@@ -23,11 +23,11 @@ namespace Application.Service
 
         }
 
-        public async Task <ApiresponseDto<List<RoleSelectionDto>>> GetAllRolesAsync()
+        public async Task <ApiresponseDto<List<RoleSelectionDto>>> GetAllRole()
         {
             try
             {
-                var data = await _rolerepository.GetAllRolesAsync();
+                var data = await _rolerepository.GetAllRoles();
                 if (data.Count == 0)
                 {
                     return new ApiresponseDto<List<RoleSelectionDto>>

@@ -17,7 +17,7 @@ namespace Blood_donation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRoles()
         {
-            var role= await  _roleservice.GetAllRolesAsync();
+            var role= await  _roleservice.GetAllRole();
             return StatusCode(role.StatusCode, role);
 
         }

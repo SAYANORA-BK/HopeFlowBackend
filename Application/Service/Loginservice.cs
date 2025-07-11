@@ -29,6 +29,9 @@ namespace Application.Service
         {
             try
             {
+                    
+
+            
                 var user = await _loginRepository.GetUserByEmailAsync(loginDto.email);
 
                 if (user == null)
@@ -40,6 +43,7 @@ namespace Application.Service
                     };
                 }
 
+              
                 var isPasswordValid = PasswordHasher.Verify(loginDto.password, user.hashpassword);
 
                 if (!isPasswordValid)
@@ -51,17 +55,9 @@ namespace Application.Service
                     };
                 }
 
-                var roleName = await _roleRepository.GetRolesAsyncById(Convert.ToInt32(user.role));
-
-                var domainUser = new User
-                {
-                    Id = user.Id,
-                    FullName = user.full_name,
-                    Email = user.email,
-                    RoleId = Convert.ToInt32(user.role)
-                };
-
-                var token = await GenerateTokenAsync(domainUser);
+                var roleName = user.role;
+           
+                var token = await GenerateTokenAsync(user);
 
                 return new ApiresponseDto<object>
                 {
@@ -78,6 +74,7 @@ namespace Application.Service
             }
             catch (Exception ex)
             {
+             
                 return new ApiresponseDto<object>
                 {
                     StatusCode = 500,
@@ -105,9 +102,8 @@ namespace Application.Service
             return newUser;
         }
 
-        public async Task<string> GenerateTokenAsync(User user)
+        public async Task<string> GenerateTokenAsync(UserDto user)
         {
-            var roleName = await _roleRepository.GetRolesAsyncById(user.RoleId);
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -115,9 +111,9 @@ namespace Application.Service
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.Email, user.Email),
-               
+                new Claim(ClaimTypes.Name, user.full_name),
+                new Claim(ClaimTypes.Email, user.email),
+               new Claim(ClaimTypes.Role, user.role)
                
             };
 

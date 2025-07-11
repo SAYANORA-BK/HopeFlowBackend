@@ -16,9 +16,9 @@ namespace Domain.Model
             public string Address { get; set; }
             public string City { get; set; }
             public string BloodGroup { get; set; }
-        public bool IsBlocked { get; set; } = false;
+           public bool IsBlocked { get; set; } = false;
             public int RoleId { get; set; }
-        public string GoogleId { get; set; } 
+          public string GoogleId { get; set; } 
             
         }
   }

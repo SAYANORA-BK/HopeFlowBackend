@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using E_commerce.Service;
+using Blood_donation.MiddleWare;
+using Infrastructure.SignalR;
 
 namespace Blood_donation
 {
@@ -73,7 +75,12 @@ namespace Blood_donation
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-       
+
+
+            builder.Services.AddSignalR();
+
+
+
 
 
             builder.Services.AddSingleton<Dappercontext>();
@@ -87,13 +94,17 @@ namespace Blood_donation
             builder.Services.AddScoped<IBloodReqestRepository,BloodRequestRepository>();
             builder.Services.AddScoped<ICloudinaryService,CloudinaryService>();
             builder.Services.AddScoped<ICertificaterepository,CertificateRepository>();
-
-
+            builder.Services.AddScoped<IAdminRepository,AdminRepository>();
+            builder.Services.AddScoped<IAdminService,AdminService>();
+            builder.Services.AddScoped<INotificationService, NotificationService>();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Donor"));
-                options.AddPolicy("DonorOnly", policy => policy.RequireRole("Bloodbank"));
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
+                options.AddPolicy("DonorOnly", policy => policy.RequireRole("Donor"));
+                options.AddPolicy("RecipientOnly", policy => policy.RequireRole("Recipient"));
+                options.AddPolicy("BloodbankOnly", policy => policy.RequireRole("Bloodbank"));
                 
             });
 
@@ -110,7 +121,8 @@ namespace Blood_donation
             });
 
             var app = builder.Build();
-        
+
+            app.MapHub<NotificationHub>("/notificationHub");
 
 
 
@@ -125,7 +137,7 @@ namespace Blood_donation
             app.UseCors("AllowFrontend");
             app.UseAuthentication(); 
             app.UseAuthorization();
-
+            app.UseMiddleware<GetUserIdMiddleWare>();
             app.MapControllers();
 
             app.Run();

@@ -10,9 +10,11 @@ namespace Application.Interface.IRepository
    public interface IBloodReqestRepository
     {
         Task<bool> UserExistsAsync(int userId);
-        Task<bool> CreateRequestAsync(BloodrequestDto dto, int requesterId);
-        Task<IEnumerable<BloodrequestResponseDto>> GetRequestsByStatusAsync(string status);
-        Task<bool> UpdateRequestStatusAsync(int requestId, string status);
-        Task<IEnumerable<BloodrequestResponseDto>> GetAllRequestsAsync();
+        Task<bool> CreateRequest(BloodrequestDto dto, int requesterId);
+        Task<IEnumerable<BloodrequestResponseDto>> GetRequestsByStatus(string status);
+        Task<bool> UpdateRequestStatus(int requestId, string status);
+        Task<IEnumerable<BloodrequestResponseDto>> GetAllRequest();
+        Task<bool> EditRequest(int requestId, BloodrequestDto dto);
+        Task<bool> DeleteRequest(int id);
     }
 }

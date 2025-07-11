@@ -6,7 +6,7 @@ namespace Application.Interface.IService
     public interface IRoleservice
     {
 
-        Task<ApiresponseDto<List<RoleSelectionDto>>> GetAllRolesAsync();
+        Task<ApiresponseDto<List<RoleSelectionDto>>> GetAllRole();
         
 
     }

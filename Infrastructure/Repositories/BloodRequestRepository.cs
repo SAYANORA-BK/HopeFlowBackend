@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
         }
 
 
-        public async Task<bool> CreateRequestAsync(BloodrequestDto dto, int requesterId)
+        public async Task<bool> CreateRequest(BloodrequestDto dto, int requesterId)
         {
             var sql = @"INSERT INTO blood_requests 
                     (requested_by, blood_group, units_required, location, reason, status, requested_at)
@@ -44,7 +44,7 @@ namespace Infrastructure.Repositories
             return result > 0;
         }
 
-        public async Task<IEnumerable<BloodrequestResponseDto>> GetRequestsByStatusAsync(string status)
+        public async Task<IEnumerable<BloodrequestResponseDto>> GetRequestsByStatus(string status)
         {
             var sql = @"SELECT r.id, u.full_name AS RequesterName, r.blood_group, r.units_required, 
                            r.location, r.reason, r.status, r.requested_at
@@ -56,7 +56,7 @@ namespace Infrastructure.Repositories
             return await connection.QueryAsync<BloodrequestResponseDto>(sql, new { Status = status });
         }
 
-        public async Task<bool> UpdateRequestStatusAsync(int requestId, string status)
+        public async Task<bool> UpdateRequestStatus(int requestId, string status)
         {
             var sql = @"UPDATE blood_requests 
                     SET status = @Status, updated_at = GETDATE() 
@@ -68,7 +68,7 @@ namespace Infrastructure.Repositories
 
 
         }
-        public async Task<IEnumerable<BloodrequestResponseDto>> GetAllRequestsAsync()
+        public async Task<IEnumerable<BloodrequestResponseDto>> GetAllRequest()
         {
             var sql = @"SELECT r.id, u.full_name AS RequesterName, r.blood_group, r.units_required, 
                        r.location, r.reason, r.status, r.requested_at
@@ -77,6 +77,39 @@ namespace Infrastructure.Repositories
 
              var connection = _dappercontext.CreateConnection();
             return await connection.QueryAsync<BloodrequestResponseDto>(sql);
+        }
+
+        public async Task<bool> EditRequest(int requestId, BloodrequestDto dto)
+        {
+            var sql = @"UPDATE blood_requests 
+                SET blood_group = @BloodGroup, 
+                    units_required = @UnitsRequired, 
+                    location = @Location, 
+                    reason = @Reason, 
+                    updated_at = GETDATE()
+                WHERE id = @RequestId";
+
+            using var connection = _dappercontext.CreateConnection();
+            var result = await connection.ExecuteAsync(sql, new
+            {
+                BloodGroup = dto.BloodGroup,
+                UnitsRequired = dto.UnitsRequired,
+                Location = dto.Location,
+                Reason = dto.Reason,
+                RequestId = requestId
+            });
+
+            return result > 0;
+        }
+
+        public async Task<bool> DeleteRequest(int id)
+        {
+            var sql = "DELETE FROM BloodRequest WHERE request_id = @Id";
+            var connection = _dappercontext.CreateConnection();
+            {
+                var affectedRows = await connection.ExecuteAsync(sql, new { Id = id });
+                return affectedRows > 0;
+            }
         }
 
 

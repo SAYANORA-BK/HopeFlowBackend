@@ -21,7 +21,7 @@
         {
             _dappercontext = dappercontext;
         }
-        public async Task<List<RoleSelectionDto>> GetAllRolesAsync()
+        public async Task<List<RoleSelectionDto>> GetAllRoles()
         {
 
 
@@ -29,9 +29,14 @@
             var connection = _dappercontext.CreateConnection();
             var roles = await connection.QueryAsync<RoleSelectionDto>(sql);
             return roles.ToList();
+
+
+
+
+
         }
 
-        public async Task<string> GetRolesAsyncById(int roleid)
+        public async Task<string> GetRolesById(int roleid)
         {
             var sql = "SELECT role_name FROM Roles WHERE Role_id = @roleid";
             var connection = _dappercontext.CreateConnection();

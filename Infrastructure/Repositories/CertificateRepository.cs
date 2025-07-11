@@ -21,7 +21,7 @@ namespace Infrastructure.Repositories
             var sql = @"INSERT INTO certificate ( user_id, role_id, upload_date, verified,image)
                 VALUES ( @UserId, @RoleId, @UploadDate, @Verified,@Certificate)";
 
-            using var connection = _dappercontext.CreateConnection();
+            var connection = _dappercontext.CreateConnection();
 
             var certificates = new
             {

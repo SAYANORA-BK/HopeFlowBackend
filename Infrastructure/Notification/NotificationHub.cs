@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 
-namespace Application.Helpers
+namespace Infrastructure.Notification
 {
- public   class Jwthelper
+   public  class NotificationHub:Hub
     {
+
     }
 }

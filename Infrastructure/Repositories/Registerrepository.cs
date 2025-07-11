@@ -114,7 +114,7 @@ namespace Infrastructure.Repositories
            
         )";
 
-            using var connection = _dappercontext.CreateConnection();
+           var connection = _dappercontext.CreateConnection();
 
             var result = await connection.ExecuteAsync(sql, hospitalregistrationDto);
 
