@@ -13,6 +13,7 @@ namespace Application.Interface.IService
         Task<ApiresponseDto<object>> AddDonor(DonorRegistrationDto donorRegistrationDto);
         Task<ApiresponseDto<object>> AddRecipient(RecipientregistrationDto recipientRegistrationDto);
         Task<ApiresponseDto<object>> AddHospital(HospitalregistrationDto hospitalregistrationDto);
+        Task<ApiresponseDto<object>> AddBloodBank(BloodBankRegisterDto bloodBankRegisterDto);
 
     }
 }

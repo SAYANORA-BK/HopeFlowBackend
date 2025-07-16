@@ -11,6 +11,7 @@ namespace Application.Interface.IRepository
    public interface IRolerepository
     {
         Task<List<RoleSelectionDto>> GetAllRoles();
+
         Task<string> GetRolesById(int roleid);
     }
 }

@@ -19,7 +19,7 @@ namespace Application.DTO
         [Required]
         public string hashpassword { get; set; }
         [Required]
-        public string role { get; set; }
+        public string role_name { get; set; }
 
         [Required]
         public int google_id { get; set; }

@@ -14,7 +14,7 @@ namespace Application.Interface.IService
         Task<ApiresponseDto<object>> VerifyCertificate(int id);
         Task<ApiresponseDto<object>> BlockUser(int id);
         Task<ApiresponseDto<object>> UnBlockUser(int id);
-        Task<ApiresponseDto<IEnumerable<CampDto>>> GetAllCamps();
+        Task<ApiresponseDto<IEnumerable<BloodcampDto>>> GetAllCamps();
         Task<ApiresponseDto<object>> ApproveCamp(int id);
         Task<ApiresponseDto<object>> UpdateCamp(CampDto dto);
      

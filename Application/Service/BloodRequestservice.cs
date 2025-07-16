@@ -115,6 +115,30 @@ namespace Application.Service
 
         public async Task<ApiresponseDto<string>> DeleteRequestById(int requestId)
         {
+            
+            var status = await _repository.GetRequestStatusById(requestId);
+
+            if (status == null)
+            {
+                return new ApiresponseDto<string>
+                {
+                    StatusCode = 404,
+                    Message = "Blood request not found.",
+                    Data = null
+                };
+            }
+
+            if (status.Equals("Rejected", StringComparison.OrdinalIgnoreCase))
+            {
+                return new ApiresponseDto<string>
+                {
+                    StatusCode = 400,
+                    Message = "Rejected request! Not able to delete.",
+                    Data = null
+                };
+            }
+
+      
             var isDeleted = await _repository.DeleteRequest(requestId);
 
             if (!isDeleted)
@@ -135,6 +159,8 @@ namespace Application.Service
             };
         }
 
-
     }
+
+
 }
+

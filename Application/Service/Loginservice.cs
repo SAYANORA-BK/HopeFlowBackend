@@ -55,7 +55,7 @@ namespace Application.Service
                     };
                 }
 
-                var roleName = user.role;
+                var roleName = user.role_name;
            
                 var token = await GenerateTokenAsync(user);
 
@@ -94,7 +94,7 @@ namespace Application.Service
                 email = email,
                 full_name = fullName,
                 google_id = googleId,
-                role = "", 
+                role_name = "", 
                 hashpassword = "" 
             };
 
@@ -113,7 +113,7 @@ namespace Application.Service
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.full_name),
                 new Claim(ClaimTypes.Email, user.email),
-               new Claim(ClaimTypes.Role, user.role)
+                new Claim(ClaimTypes.Role, user.role_name)
                
             };
 

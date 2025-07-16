@@ -82,11 +82,11 @@ namespace Application.Service
             };
         }
 
-        public async Task<ApiresponseDto<IEnumerable<CampDto>>> GetAllCamps()
+        public async Task<ApiresponseDto<IEnumerable<BloodcampDto>>> GetAllCamps()
         {
             var camps = await _repository.GetAllCamps();
 
-            return new ApiresponseDto<IEnumerable<CampDto>>
+            return new ApiresponseDto<IEnumerable<BloodcampDto>>
             {
                 StatusCode = 200,
                 Message = camps.Any() ? "Camps fetched successfully." : "No camps found.",

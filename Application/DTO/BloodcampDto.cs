@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Model
+namespace Application.DTO
 {
-  public  class Bloodcamp:Baseclass
+ public   class BloodcampDto
     {
+
         public int Id { get; set; }
-        public int CreatedBy { get; set; }
+        public int BankId { get; set; }
         public string CampName { get; set; }
         public string Location { get; set; }
         public DateTime StartDate { get; set; }

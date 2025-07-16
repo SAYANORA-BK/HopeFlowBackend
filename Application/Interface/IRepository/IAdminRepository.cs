@@ -16,7 +16,7 @@ namespace Application.Interface.IRepository
         Task<bool> BlockUser(int id);
         Task<bool> UnBlockUser(int id);
 
-        Task<IEnumerable<CampDto>> GetAllCamps();
+        Task<IEnumerable<BloodcampDto>> GetAllCamps();
         Task<bool> ApproveCamp(int id);
         Task<bool> UpdateCamp(CampDto dto);
         Task<AnalyticDto> GetAnalyticsSummary();

@@ -38,6 +38,14 @@ namespace Blood_donation.Controllers
 
         }
 
+        [HttpPost("BloodbankRegister")]
+
+        public async Task<IActionResult> Register([FromForm]BloodBankRegisterDto bloodBankRegisterDto)
+        {
+            var bloodbank=await _registerservice.AddBloodBank(bloodBankRegisterDto);
+            return StatusCode(bloodbank.StatusCode,bloodbank);
+        }
+
 
     }
 }

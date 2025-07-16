@@ -15,6 +15,7 @@ namespace Application.Interface.IRepository
         Task<bool> UpdateRequestStatus(int requestId, string status);
         Task<IEnumerable<BloodrequestResponseDto>> GetAllRequest();
         Task<bool> EditRequest(int requestId, BloodrequestDto dto);
+        Task<string?> GetRequestStatusById(int requestId);
         Task<bool> DeleteRequest(int id);
     }
 }

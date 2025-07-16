@@ -1,21 +1,26 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Application.DTO
 {
-    public class BloodbankregistrationDto
+    public class BloodBankRegisterDto
     {
+
         [Required]
         public string full_name { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required, EmailAddress]
         public string email { get; set; }
 
         [Required]
         public string hashpassword { get; set; }
 
         [Required]
-        [Phone]
         public string phone_number { get; set; }
 
         [Required]
@@ -25,9 +30,10 @@ namespace Application.DTO
         public string city { get; set; }
 
         [Required]
-        public int role_id { get; set; }
+        public int role_id { get; set; } 
 
         [Required]
-        public int google_id { get; set; }
+        public IFormFile certificate { get; set; } 
+
     }
 }

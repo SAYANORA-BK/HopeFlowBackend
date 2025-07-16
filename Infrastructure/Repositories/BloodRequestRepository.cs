@@ -102,9 +102,18 @@ namespace Infrastructure.Repositories
             return result > 0;
         }
 
+
+        public async Task<string?> GetRequestStatusById(int requestId)
+        {
+            var sql = "SELECT status FROM blood_requests WHERE id = @Id";
+            using var connection = _dappercontext.CreateConnection();
+            return await connection.QueryFirstOrDefaultAsync<string>(sql, new { Id = requestId });
+        }
+
+
         public async Task<bool> DeleteRequest(int id)
         {
-            var sql = "DELETE FROM BloodRequest WHERE request_id = @Id";
+            var sql = "DELETE FROM blood_requests WHERE id = @Id and status!='rejected'";
             var connection = _dappercontext.CreateConnection();
             {
                 var affectedRows = await connection.ExecuteAsync(sql, new { Id = id });

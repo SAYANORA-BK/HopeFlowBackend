@@ -52,28 +52,13 @@ namespace Blood_donation.Controllers
 
         [HttpGet("camps")]
         [Authorize(Roles ="Admin,Donor")]
-        public async Task<ActionResult<ApiresponseDto<IEnumerable<CampDto>>>> GetAllCamps()
+        public async Task<ActionResult<ApiresponseDto<IEnumerable<BloodcampDto>>>> GetAllCamps()
         {
             var response = await _adminService.GetAllCamps();
             return StatusCode(response.StatusCode, response);
         }
 
-        [HttpPut("approve-camp/{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ApiresponseDto<object>>> ApproveCamp(int id)
-        {
-            var response = await _adminService.ApproveCamp(id);
-            return StatusCode(response.StatusCode, response);
-        }
-
-        [HttpPut("update-camp")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ApiresponseDto<object>>> UpdateCamp([FromBody] CampDto dto)
-        {
-            var response = await _adminService.UpdateCamp(dto);
-            return StatusCode(response.StatusCode, response);
-        }
-
+        
         [HttpGet("analytics")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ApiresponseDto<AnalyticDto>>> GetAnalyticsSummary()

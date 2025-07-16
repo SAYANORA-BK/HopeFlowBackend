@@ -98,6 +98,9 @@ namespace Blood_donation
             builder.Services.AddScoped<IAdminService,AdminService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+            builder.Services.AddScoped<IBloodBankRepository, BloodBankRepository>();    
+            builder.Services.AddScoped<IBloodBankService, BloodBankService>();
+
 
             builder.Services.AddAuthorization(options =>
             {
@@ -114,7 +117,7 @@ namespace Blood_donation
                 options.AddPolicy("AllowFrontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:5175")
+                        policy.WithOrigins("http://localhost:5173")
                              .AllowAnyHeader()
                               .AllowAnyMethod();
                     });

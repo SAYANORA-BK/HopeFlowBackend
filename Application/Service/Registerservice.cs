@@ -7,6 +7,7 @@ using Application.DTO;
 using Application.Helpers;
 using Application.Interface.IRepository;
 using Application.Interface.IService;
+using Domain.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using ommon;
@@ -18,7 +19,7 @@ namespace Application.Service
         private readonly IRegisterrepository _registerrepository;
         private readonly ICloudinaryService _cloudinaryservice;
         private readonly ICertificaterepository _certificaterepository;
-        public Registerservice(IRegisterrepository registerrepository,ICloudinaryService cloudinaryService, ICertificaterepository certificaterepository)
+        public Registerservice(IRegisterrepository registerrepository, ICloudinaryService cloudinaryService, ICertificaterepository certificaterepository)
         {
             _registerrepository = registerrepository;
             _cloudinaryservice = cloudinaryService;
@@ -28,42 +29,42 @@ namespace Application.Service
         {
             try
             {
-               
+
                 donorRegistrationDto.hashpassword = PasswordHasher.Hash(donorRegistrationDto.hashpassword);
 
-                var isSaved = await _registerrepository. AddDonor(donorRegistrationDto);
+                var isSaved = await _registerrepository.AddDonor(donorRegistrationDto);
                 var image = await _cloudinaryservice.UploadImage(donorRegistrationDto.certificate);
                 var certificateupload = await _certificaterepository.AddCertificateAsync(image, isSaved.Id);
 
-                if (isSaved!=null)
+                if (isSaved != null)
                 {
                     return new ApiresponseDto<object>
                     {
-                        StatusCode= 200,
+                        StatusCode = 200,
                         Message = "Donor registered successfully",
-                       
+
                     };
                 }
-               
-                    return new ApiresponseDto<object>
-                    {
-                        StatusCode =401,
-                        Message = "Registration failed",
-                       
-                    };
-                
+
+                return new ApiresponseDto<object>
+                {
+                    StatusCode = 401,
+                    Message = "Registration failed",
+
+                };
+
             }
             catch (Exception ex)
             {
                 return new ApiresponseDto<object>
                 {
-                    StatusCode =500 ,
+                    StatusCode = 500,
                     Message = $"Error: {ex.Message}",
-                   
+
                 };
             }
         }
-      public async   Task<ApiresponseDto<object>> AddRecipient(RecipientregistrationDto recipientRegistrationDto)
+        public async Task<ApiresponseDto<object>> AddRecipient(RecipientregistrationDto recipientRegistrationDto)
         {
             try
             {
@@ -102,7 +103,7 @@ namespace Application.Service
 
         }
 
-     public async   Task<ApiresponseDto<object>> AddHospital(HospitalregistrationDto hospitalregistrationDto)
+        public async Task<ApiresponseDto<object>> AddHospital(HospitalregistrationDto hospitalregistrationDto)
         {
             try
             {
@@ -114,7 +115,7 @@ namespace Application.Service
                 var image = await _cloudinaryservice.UploadImage(hospitalregistrationDto.certificate);
                 var certificateupload = await _certificaterepository.AddCertificateAsync(image, isSaved.Id);
 
-                if (isSaved!=null)
+                if (isSaved != null)
                 {
                     return new ApiresponseDto<object>
                     {
@@ -139,6 +140,48 @@ namespace Application.Service
                     StatusCode = 500,
                     Message = $"Error: {ex.Message}",
 
+                };
+            }
+        }
+
+
+        public async Task<ApiresponseDto<object>> AddBloodBank(BloodBankRegisterDto bloodBankRegisterDto)
+        {
+            try
+            {
+          
+                bloodBankRegisterDto.hashpassword = PasswordHasher.Hash(bloodBankRegisterDto.hashpassword);
+
+          
+                var isSaved = await _registerrepository.AddBloodBank(bloodBankRegisterDto);
+
+                var image = await _cloudinaryservice.UploadImage(bloodBankRegisterDto.certificate);
+
+              
+                var certificateupload = await _certificaterepository.AddCertificateAsync(image, isSaved.Id);
+
+          
+                if (isSaved != null)
+                {
+                    return new ApiresponseDto<object>
+                    {
+                        StatusCode = 200,
+                        Message = "BloodBank registered successfully",
+                    };
+                }
+
+                return new ApiresponseDto<object>
+                {
+                    StatusCode = 401,
+                    Message = "Registration failed",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiresponseDto<object>
+                {
+                    StatusCode = 500,
+                    Message = $"Error: {ex.Message}",
                 };
             }
         }

@@ -21,7 +21,7 @@ namespace Blood_donation.Controllers
 
 
         [HttpPost("create")]
-        [Authorize(Roles ="Recipient,Donor")]
+        [Authorize(Roles ="Recipient/Hospital,Donor")]
         public async Task<IActionResult> Create([FromBody] BloodrequestDto dto)
         {
             int requesterId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
@@ -38,7 +38,7 @@ namespace Blood_donation.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "Recipient")]
+        [Authorize(Roles = "Recipient,Donor")]
         public async Task<IActionResult> GetAllRequests()
         {
             var response = await _service.GetAllRequests();

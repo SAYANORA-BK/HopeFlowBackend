@@ -21,7 +21,7 @@ public class AdminRepository:IAdminRepository
 
         public async Task<IEnumerable<AdminuserDto>> GetAllUsers()
         {
-            var sql = "SELECT id, full_name AS FullName, email, role as Role, is_verified AS IsVerified, isblocked AS IsBlocked FROM users";
+            var sql = "SELECT id, full_name AS FullName, email, role as Role, is_verified AS IsVerified, isblocked AS IsBlocked FROM users where role!='Admin'";
             using var connection = _dapperContext.CreateConnection();
             return await connection.QueryAsync<AdminuserDto>(sql);
         }
@@ -55,11 +55,21 @@ public class AdminRepository:IAdminRepository
             return affected > 0;
         }
 
-        public async Task<IEnumerable<CampDto>> GetAllCamps()
+        public async Task<IEnumerable<BloodcampDto>> GetAllCamps()
         {
-            var sql = "SELECT id, title, date, location, is_approved AS IsApproved FROM blood_camps";
-             var connection = _dapperContext.CreateConnection();
-            return await connection.QueryAsync<CampDto>(sql);
+            var sql = @"
+        SELECT 
+            id  AS id,
+            created_by AS BankId,
+            camp_name AS CampName,
+            location,
+            start_date AS StartDate,
+            end_date AS EndDate,
+            description,
+            is_verified
+        FROM blood_camps";
+            var connection = _dapperContext.CreateConnection();
+            return await connection.QueryAsync<BloodcampDto>(sql);
         }
 
         public async Task<bool> ApproveCamp(int id)
@@ -73,7 +83,9 @@ public class AdminRepository:IAdminRepository
         public async Task<bool> UpdateCamp(CampDto dto)
         {
             var sql = @"UPDATE blood_camps 
-                         SET title = @Title, date = @Date, location = @Location, is_approved = @IsApproved 
+             SET title = @CampName, 
+                 date = @StartDate, 
+                 location = @Location 
                          WHERE id = @Id";
             var connection = _dapperContext.CreateConnection();
             var affected = await connection.ExecuteAsync(sql, dto);

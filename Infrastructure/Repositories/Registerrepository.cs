@@ -124,11 +124,55 @@ namespace Infrastructure.Repositories
               );
 
             return reg;
+  }
+        public async Task<User> AddBloodBank(BloodBankRegisterDto bloodBankRegisterDto)
+        {
+            var sqlUser = @"
+        INSERT INTO users (
+            full_name, email, hashpassword, phone_number,
+            address, city, role_id
+        ) VALUES (
+            @full_name, @email, @hashpassword, @phone_number,
+            @address, @city, @role_id
+        );
+        SELECT CAST(SCOPE_IDENTITY() as int);";
 
+            using var connection = _dappercontext.CreateConnection();
+            connection.Open(); 
+            using var transaction = connection.BeginTransaction();
 
+            try
+            {
+             
+                var userId = await connection.ExecuteScalarAsync<int>(sqlUser, bloodBankRegisterDto, transaction);
 
+              
+                var sqlBank = @"
+            INSERT INTO blood_banks (user_id, bank_name, address)
+            VALUES (@UserId, @BankName, @Address);";
+
+                await connection.ExecuteAsync(sqlBank, new
+                {
+                    UserId = userId,
+                    BankName = bloodBankRegisterDto.full_name,
+                    Address = bloodBankRegisterDto.address
+                }, transaction);
+
+                transaction.Commit();
+
+         
+                var reg = await connection.QueryFirstOrDefaultAsync<User>(
+                    "SELECT * FROM users WHERE id = @Id;",
+                    new { Id = userId });
+
+                return reg;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception("Error: " + ex.Message);
+            }
         }
-
 
     }
 }

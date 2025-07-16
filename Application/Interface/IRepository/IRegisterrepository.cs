@@ -12,6 +12,7 @@ namespace Application.Interface.IRepository
         Task<User> AddDonor(DonorRegistrationDto donorRegistrationDto);
         Task<bool>AddRecipient(RecipientregistrationDto recipientRegistrationDto);
         Task<User> AddHospital(HospitalregistrationDto hospitalregistrationDto);
+        Task<User> AddBloodBank(BloodBankRegisterDto bloodBankRegisterDto);
 
 
 

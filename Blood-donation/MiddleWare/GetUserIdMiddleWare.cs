@@ -1,4 +1,6 @@
-﻿using System.Security.Claims;
+﻿using System.Data;
+using System.Security.Claims;
+using Microsoft.Data.SqlClient; // or use your existing Dapper context
 
 namespace Blood_donation.MiddleWare
 {
@@ -6,40 +8,63 @@ namespace Blood_donation.MiddleWare
     {
         private readonly ILogger<GetUserIdMiddleWare> _logger;
         private readonly RequestDelegate _next;
-        public GetUserIdMiddleWare(ILogger<GetUserIdMiddleWare> logger, RequestDelegate next)
+        private readonly IConfiguration _configuration;
+
+        public GetUserIdMiddleWare(ILogger<GetUserIdMiddleWare> logger, RequestDelegate next, IConfiguration configuration)
         {
             _logger = logger;
             _next = next;
+            _configuration = configuration;
         }
+
         public async Task InvokeAsync(HttpContext context)
         {
             if (context.User.Identity?.IsAuthenticated == true)
             {
-                var idclaim = context.User.FindFirst(ClaimTypes.NameIdentifier);
+                var idClaim = context.User.FindFirst(ClaimTypes.NameIdentifier);
 
-                if (idclaim != null)
+                if (idClaim != null)
                 {
-                    _logger.LogInformation($"NameIdentifier claim found: {idclaim.Value}");
-                    if (int.TryParse(idclaim.Value, out var userId))
+                    if (int.TryParse(idClaim.Value, out var userId))
                     {
-                        context.Items["UserId"] = userId;
-                        _logger.LogInformation($"UserId successfully parsed: {userId}");
+                        try
+                        {
+                            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+                            using var connection = new SqlConnection(connectionString);
+                            await connection.OpenAsync();
+
+                            var command = new SqlCommand("SELECT id FROM blood_banks WHERE user_id = @userId", connection);
+                            command.Parameters.AddWithValue("@userId", userId);
+
+                            var result = await command.ExecuteScalarAsync();
+
+                            if (result != null && int.TryParse(result.ToString(), out var bankId))
+                            {
+                                context.Items["UserId"] = bankId;
+                                _logger.LogInformation($"Mapped userId {userId} to blood_bank id {bankId}");
+                            }
+                            else
+                            {
+                                _logger.LogWarning($"No blood bank found for userId {userId}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError(ex, "Error fetching blood bank ID for user.");
+                        }
                     }
                     else
                     {
-                        _logger.LogWarning($"NameIdentifier claim value '{idclaim.Value}' is not a valid integer.");
+                        _logger.LogWarning($"Invalid userId in token: {idClaim.Value}");
                     }
                 }
                 else
                 {
-                    _logger.LogWarning("NameIdentifier claim not found in the token.");
+                    _logger.LogWarning("No NameIdentifier claim found.");
                 }
             }
-            else
-            {
-                _logger.LogInformation("User is not authenticated.");
-            }
+
             await _next(context);
         }
     }
-    }
+}

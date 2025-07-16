@@ -18,11 +18,11 @@ namespace Infrastructure.Repositories
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
         {
-            var sql = "SELECT * FROM users WHERE email = @Email";
+            var sql = "SELECT u.*, r.role_name FROM users u JOIN roles r ON u.role_id = r.Role_id WHERE u.email = @Email ";
 
             using var connection = _dapperContext.CreateConnection();
             var user = await connection.QueryFirstOrDefaultAsync<UserDto>(sql, new { Email = email });
-            Console.WriteLine(user.role);
+            Console.WriteLine(user.role_name);
             return user;
         }
 
