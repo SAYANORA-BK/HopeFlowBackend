@@ -38,7 +38,7 @@ namespace Blood_donation.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "Recipient,Donor")]
+        [Authorize(Roles = "Recipient,donor")]
         public async Task<IActionResult> GetAllRequests()
         {
             var response = await _service.GetAllRequests();
