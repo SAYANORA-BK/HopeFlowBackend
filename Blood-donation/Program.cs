@@ -8,7 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using E_commerce.Service;
-using Blood_donation.MiddleWare;
 using Infrastructure.SignalR;
 
 namespace Blood_donation
@@ -100,13 +99,16 @@ namespace Blood_donation
             builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
             builder.Services.AddScoped<IBloodBankRepository, BloodBankRepository>();    
             builder.Services.AddScoped<IBloodBankService, BloodBankService>();
+            builder.Services.AddScoped<IDonorRepository, DonorRepository>();
+            builder.Services.AddScoped<IDonorService, DonorService>();
+
 
 
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireRole("admin"));
                 options.AddPolicy("DonorOnly", policy => policy.RequireRole("Donor"));
-                options.AddPolicy("RecipientOnly", policy => policy.RequireRole("Recipient"));
+                options.AddPolicy("RecipientOnly", policy => policy.RequireRole("Recipient/Hospital"));
                 options.AddPolicy("BloodbankOnly", policy => policy.RequireRole("Bloodbank"));
                 
             });

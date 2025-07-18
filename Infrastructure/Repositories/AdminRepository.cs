@@ -102,6 +102,7 @@ public class AdminRepository:IAdminRepository
                     (SELECT COUNT(*) FROM users WHERE role='Donor' ) AS TotalDonors,
                     (SELECT COUNT(*) FROM users WHERE role= 'recipient') AS TotalRecipients,
                     (SELECT COUNT(*) FROM  users WHERE role='Hospital') AS TotalHospital,
+                    (SELECT COUNT(*)FROM users WHERE role ='bloodbank')AS TotalBloodbanks,
                     (SELECT COUNT(*) FROM blood_requests) AS TotalRequests,
                     (SELECT COUNT(*) FROM blood_requests WHERE status = 'Accepted') AS FulfilledRequests";
 

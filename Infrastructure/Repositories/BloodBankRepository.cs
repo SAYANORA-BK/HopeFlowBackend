@@ -22,12 +22,12 @@ namespace Infrastructure.Repositories
         public async Task<IEnumerable<BloodInventoryDto>> GetInventory(int bankId)
         {
             string sql = @"
-        SELECT 
+            SELECT 
             blood_group AS BloodGroup, 
             units_available AS UnitsAvailable, 
             last_updated AS LastUpdated
-        FROM blood_inventory 
-        WHERE blood_bank_id = @BankId";
+            FROM blood_inventory 
+            WHERE blood_bank_id = @BankId";
 
             using var connection = _dappercontext.CreateConnection();
             return await connection.QueryAsync<BloodInventoryDto>(sql, new { BankId = bankId });
@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
         {
             var connection = _dappercontext.CreateConnection();
 
-            string sql = "SELECT id FROM blood_banks WHERE id = @UserId";
+            string sql = "SELECT user_id FROM blood_banks WHERE user_id = @UserId";
             var bankId = await connection.QueryFirstOrDefaultAsync<int?>(sql, new { UserId = userId });
 
             return bankId;
@@ -64,10 +64,10 @@ namespace Infrastructure.Repositories
             {
               
                 var updateSql = @"
-            UPDATE blood_inventory
-            SET units_available = @UnitsAvailable,
-                last_updated = GETDATE()
-            WHERE blood_group = @BloodGroup AND blood_bank_id = @BankId";
+                 UPDATE blood_inventory
+                 SET units_available = @UnitsAvailable,
+                 last_updated = GETDATE()
+                 WHERE blood_group = @BloodGroup AND blood_bank_id = @BankId";
 
                 var rowsAffected = await connection.ExecuteAsync(updateSql, new
                 {
@@ -95,11 +95,6 @@ namespace Infrastructure.Repositories
                 return rowsAffected > 0;
             }
         }
-
-
-
-
-
         public async Task<IEnumerable<CampDto>> GetCamps(int bankId)
         {
             string sql = "SELECT    camp_name AS campName,    location,   start_date AS startDate,    end_date AS endDate,   description FROM blood_camps where  created_by = @BankId";

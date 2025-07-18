@@ -16,13 +16,14 @@ namespace Blood_donation.Controllers
         {
             _bloodbanbankservice = bloodbankService;
         }
-
-        [HttpGet("inventory/{bankId}")]
-        public async Task<IActionResult> GetInventory(int bankId)
+        [HttpGet("inventory")]
+        public async Task<IActionResult> GetInventory()
         {
+            int bankId = Convert.ToInt32(HttpContext.Items["UserId"]);
             var response = await _bloodbanbankservice.GetInventory(bankId);
             return StatusCode(response.StatusCode, response);
         }
+
 
         [HttpPost("inventory/update")]
         public async Task<IActionResult> UpdateInventory([FromBody] BloodInventoryDto dto)

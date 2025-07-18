@@ -12,6 +12,7 @@ namespace Application.DTO
         public int TotalDonors { get; set; }
         public int TotalRecipients { get; set; }
         public int TotalHospital {  get; set; }
+        public int TotalBloodbanks {  get; set; }
         public int TotalRequests { get; set; }
         public int FulfilledRequests { get; set; }
     }
